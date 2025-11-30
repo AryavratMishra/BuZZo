@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import './Help.css';
 import {
   FaBook,
@@ -17,7 +15,6 @@ import {
 
 export default function Help() {
   // Sidebar navigation topics
-  const navigate=useNavigate();
   const sidebarTopics = [
     { title: "Booking & Cancellations", icon: <FaBook /> },
     { title: "Payments & Refunds", icon: <FaCreditCard /> },
@@ -89,12 +86,7 @@ export default function Help() {
        {/* Support Buttons */}
        <div className={`support-buttons ${search ? "sticky" : ""}`}>
          <button className="chat-btn">Chat with Support</button>
-        <button
-      className="request-btn"
-      onClick={() => navigate("/contact")}
-    >
-      Submit a Request
-    </button>
+        <button className="request-btn">Submit a Request</button>
        </div>
       </div>
     </div>
