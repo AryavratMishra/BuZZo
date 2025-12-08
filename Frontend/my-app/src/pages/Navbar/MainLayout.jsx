@@ -15,11 +15,7 @@ const MainLayout = () => {
       <div className="container mt-4">
         <Outlet />
       </div>
-<<<<<<< HEAD
       <Chatbot />
-=======
-      {showChatbot && <Chatbot />}
->>>>>>> 7bc76bd2469061c8e92f14f048253ed5dd14c2ee
     </>
   );
 };
