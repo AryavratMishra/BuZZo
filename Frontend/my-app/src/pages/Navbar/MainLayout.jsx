@@ -15,7 +15,7 @@ const MainLayout = () => {
       <div className="container mt-4">
         <Outlet />
       </div>
-      <Chatbot />
+      {showChatbot && <Chatbot />}
     </>
   );
 };
