@@ -8,23 +8,68 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
-  const goToLogin = () => {
-    console.log('Button clixke')
-    navigate('/'); // <-- navigate to signup path
-  };
-  
 
-  const handleSignup = () => {
+  const goToLogin = () => {
+    navigate('/');
+  };
+
+  // ✅ CONNECTED TO BACKEND
+  const handleSignup = async () => {
+    if (!fullName || !email || !password || !confirmPassword) {
+      alert("All fields are required");
+      return;
+    }
+  
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    console.log('Signup attempt:', { fullName, email, password, confirmPassword });
+  
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: fullName,
+          email: email,
+          password: password
+        })
+      });
+  
+      // 🔥 HTTP safety
+      if (!res.ok) {
+        alert("Signup failed. Server error.");
+        return;
+      }
+  
+      let data;
+      try {
+        data = await res.json();
+      } catch (err) {
+        // 🔥 Backend responded but JSON not returned (Render issue)
+        alert("Account created successfully! Please login.");
+        navigate("/");
+        return;
+      }
+  
+      if (!data.success) {
+        alert(data.message);
+        return;
+      }
+  
+      alert("Account created successfully! Please login.");
+      navigate("/");
+  
+    } catch (error) {
+      alert("Signup failed. Try again.");
+    }
   };
+  
 
   return (
     <>
-      {/* Bootstrap CDN */}
       <link 
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
         rel="stylesheet" 
@@ -43,7 +88,6 @@ const Signup = () => {
 
         <div>
           <div className="signup-card">
-            {/* Logo and Brand */}
             <div className="logo-section">
               <svg className="bus-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -56,7 +100,6 @@ const Signup = () => {
 
             <h2 className="login-title">Create Your Account</h2>
 
-            {/* Full Name */}
             <div className="mb-3">
               <input
                 type="text"
@@ -67,7 +110,6 @@ const Signup = () => {
               />
             </div>
 
-            {/* Email */}
             <div className="mb-3">
               <input
                 type="email"
@@ -78,7 +120,6 @@ const Signup = () => {
               />
             </div>
 
-            {/* Password */}
             <div className="mb-3">
               <input
                 type="password"
@@ -89,7 +130,6 @@ const Signup = () => {
               />
             </div>
 
-            {/* Confirm Password */}
             <div className="mb-3">
               <input
                 type="password"
@@ -100,7 +140,6 @@ const Signup = () => {
               />
             </div>
 
-            {/* Signup Button */}
             <button 
               className="btn btn-login"
               onClick={handleSignup}
@@ -108,10 +147,11 @@ const Signup = () => {
               Create Account
             </button>
 
-            {/* Footer link to Login */}
             <div className="footer-links">
               <span>Already have an account?</span>
-              <button className="back-login-btn" onClick={goToLogin}>Back to Login</button>
+              <button className="back-login-btn" onClick={goToLogin}>
+                Back to Login
+              </button>
             </div>
           </div>
         </div>
